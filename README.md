@@ -5,6 +5,18 @@ refreshed **automatically every day**. Everything is in Indian Rupees (₹).
 
 **Stack:** React 18 + Vite + Tailwind + Recharts · Node/Express · MongoDB (Mongoose) · JWT auth · node-cron
 
+## Screenshots
+
+| Dashboard | Asset Holdings |
+|:---:|:---:|
+| ![Dashboard](docs/screenshots/1-dashboard.png) | ![Holdings](docs/screenshots/2-holdings.png) |
+| **Portfolio overview & allocation** | **All assets in one place** |
+
+| Add Investment | Tax Centre |
+|:---:|:---:|
+| ![Add Investment](docs/screenshots/3-add-investment.png) | ![Tax Centre](docs/screenshots/4-tax-centre.png) |
+| **Add once, prices auto-update** | **Capital gains & advance tax** |
+
 ## Quick start
 
 You need Node 20+ and a MongoDB (local, or a free MongoDB Atlas cluster).
@@ -129,3 +141,14 @@ cd client && npm test     # 20 tests: real React app in jsdom against a mocked A
 
 Server integration tests need a MongoDB at `mongodb://127.0.0.1:27017` (they use throwaway `invest-tracker-test-*` databases).
 
+## Known limitations
+
+* Yahoo Finance's chart endpoint is **unofficial** and can rate-limit or change without notice. Swap in a paid
+  provider by editing `server/services/prices.js` (the rest of the app only sees `{ price, previousPrice }`).
+* Gold is an **approximation of the domestic price** (international × FX × `GOLD_IMPORT_DUTY_PERCENT`, default 6 — verify the
+  current customs duty). It excludes GST/making charges.
+* FD/bond accruals are simplified (cumulative FD, quarterly compounding; coupons counted as accrued, not paid out).
+* SIPs are recorded but not auto-applied: update units/amount when installments are processed.
+* Only INR-priced instruments are supported; non-INR listings are rejected.
+* Tax figures are only as good as the data entered (dates, amounts, sub-type) — see the Tax Centre notes above.
+* The edit endpoint exists (`PATCH /api/investments/:id`) but the UI does not have an edit screen yet.
